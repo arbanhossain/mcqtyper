@@ -21,18 +21,7 @@ export default {
   },
   data() {
     return {
-      questions: [
-        {
-          id: "1",
-          statement: "WHat is thathh $a=44$",
-          choices: ["eheheh", "ohohoh", "lalala", "didid"],
-        },
-        {
-          id: "2",
-          statement: "huh waht da hesll `sin 120`",
-          choices: ["googoogog", "dododod", "yoyoyoyo", "gggg"],
-        },
-      ],
+      questions: [],
       currentId: 0,
       showForm: false,
       numberOfChoices: 4,
