@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/public/AsciiMathML.js
+js
 
 
 # local env files
