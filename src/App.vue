@@ -48,6 +48,9 @@ export default {
     }
     
   },
+  updated() {
+    window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+  },
   methods: {
     toggleShowForm() {
       this.showForm = !this.showForm;

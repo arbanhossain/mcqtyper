@@ -2,6 +2,7 @@
   <div @mouseenter="showtool = true" @mouseleave="showtool = false" class="mcq">
     <div v-show="showtool || showeditbox" class="mcqtools">
       <Toolbar @toggle-edit-form="toggleEditForm" @delete-qsn="deleteQsn(mcq.id)" :showeditbox="showeditbox" />
+      id = {{mcq.id}}
     </div>
 
     <div v-show="showeditbox">
@@ -10,8 +11,8 @@
 
     <div v-show="!showeditbox">
       <h4>{{ number }}. {{ mcq.statement }}</h4>
-      <div class="choices" v-for="choice in mcq.choices" :key="choice">
-        <Choice :choice="choice" />
+      <div class="choices" v-for="(choice, idx) in mcq.choices" :key="choice">
+        <Choice :choice="choice" :bullet="idx" />
       </div>
     </div>
   </div>
@@ -43,6 +44,7 @@ export default {
   },
   methods: {
     toggleEditForm() {
+      console.log(this.$globals);
       this.showeditbox = !this.showeditbox;
       window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
       this.$emit('save-qsn');

@@ -1,4 +1,9 @@
-import { createApp } from 'vue'
+import { createApp, VueElement } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+const app = createApp(App);
+app.config.globalProperties.$globals = {
+    bulletNames: ["A", "B", "C", "D", "E", "F", "G"],
+};
+
+app.mount('#app')

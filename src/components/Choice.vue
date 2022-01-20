@@ -1,12 +1,15 @@
 <template>
     <p class="choice">
-        {{choice}}
+        {{this.$globals.bulletNames[bullet]}} . {{choice}}
     </p>
 </template>
 
 <script>
 export default {
     name: 'Choice',
-    props: ['choice'],
+    props: {
+        choice: String,
+        bullet: Number,
+    },
 }
 </script>
