@@ -36,7 +36,7 @@
       rows="7"
       placeholder="Type Solution (if necessary)"
     ></textarea>
-
+    <br>
     <button @click.prevent="submitQsn">Submit Question</button>
   </form>
 </template>

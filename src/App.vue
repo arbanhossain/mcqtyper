@@ -1,5 +1,5 @@
 <template>
-  <Questions @save-qsn="saveQsn" @delete-qsn="deleteQsn" :questions="questions" />
+  <Questions @save-qsn="saveQsn" @paste-qsn="pasteQsn" @delete-qsn="deleteQsn" :questions="questions" />
   <AddQsn @show-form="toggleShowForm" :showForm="showForm" />
   <div v-show="showForm">
     <QsnForm @submit-qsn="submitQsn" :numberOfChoices="this.numberOfChoices" />
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       questions: [],
-      currentId: 0,
+      currentId: '',
       showForm: false,
       numberOfChoices: 4,
       msg: 'asdf',
@@ -39,6 +39,7 @@ export default {
     } else {
       this.questions = JSON.parse(localStorage.getItem("questions"));
     }
+    this.currentId = this.updateID();
   },
   mounted() {
     try {
@@ -52,11 +53,19 @@ export default {
     window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   },
   methods: {
+    updateID(){
+      let id = '';
+      do {
+        id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8);
+      } while (this.questions.filter( obj => {return obj.id == id} ).length != 0);
+      console.log(id);
+      return id;
+    },
     toggleShowForm() {
       this.showForm = !this.showForm;
     },
     submitQsn(qsn) {
-      qsn["id"] = (++this.currentId).toString();
+      qsn["id"] = this.updateID();
       this.questions = [...this.questions, qsn];
       this.updateLocalStorage();
     },
@@ -67,6 +76,16 @@ export default {
       this.updateLocalStorage();
     },
     saveQsn() {
+      this.updateLocalStorage();
+    },
+    async pasteQsn(id) {
+      let qsn = JSON.parse(await navigator.clipboard.readText());
+      qsn.id = this.updateID();
+      let idx = [...this.questions].findIndex(obj => { return obj.id == id; });
+      let newqsn = this.questions;
+      newqsn.splice(idx,0,qsn);
+      this.questions = newqsn;
+      //console.log(this.questions);
       this.updateLocalStorage();
     },
     updateLocalStorage() {

@@ -4,6 +4,8 @@
       <Toolbar
         @toggle-edit-form="toggleEditForm"
         @delete-qsn="deleteQsn(mcq.id)"
+        @copy-qsn="copyQsn(mcq.id)"
+        @paste-qsn="this.$emit('paste-qsn', mcq.id)"
         :showeditbox="showeditbox"
       />
       id = {{ mcq.id }}
@@ -61,8 +63,11 @@ export default {
     deleteQsn(id) {
       this.$emit("delete-qsn", id);
     },
+    async copyQsn(id) {
+      await navigator.clipboard.writeText(JSON.stringify(this.mcq));
+    },
   },
-  emits: ["toggle-edit-form", "delete-qsn", "save-qsn"],
+  emits: ["toggle-edit-form", "delete-qsn", "save-qsn", "copy-qsn", 'paste-qsn'],
 };
 </script>
 
