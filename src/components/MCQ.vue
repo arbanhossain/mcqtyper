@@ -14,6 +14,7 @@
       <div class="choices" v-for="(choice, idx) in mcq.choices" :key="choice">
         <Choice :choice="choice" :bullet="idx" />
       </div>
+      <h6>Answer: {{mcq.answer}}</h6>
     </div>
   </div>
 </template>
@@ -61,6 +62,7 @@ export default {
 .mcq {
   margin: 20px;
   padding: 10px;
-  border: solid black 1px;
+  border: solid rgb(173, 173, 173) 1px;
+  border-radius: 10px;
 }
 </style>

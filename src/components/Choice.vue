@@ -1,6 +1,6 @@
 <template>
     <p class="choice">
-        {{this.$globals.bulletNames[bullet]}} . {{choice}}
+        <b>{{this.$globals.bulletNames[bullet]}} .</b> {{choice}}
     </p>
 </template>
 
