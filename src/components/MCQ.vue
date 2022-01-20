@@ -1,8 +1,12 @@
 <template>
   <div @mouseenter="showtool = true" @mouseleave="showtool = false" class="mcq">
     <div v-show="showtool || showeditbox" class="mcqtools">
-      <Toolbar @toggle-edit-form="toggleEditForm" @delete-qsn="deleteQsn(mcq.id)" :showeditbox="showeditbox" />
-      id = {{mcq.id}}
+      <Toolbar
+        @toggle-edit-form="toggleEditForm"
+        @delete-qsn="deleteQsn(mcq.id)"
+        :showeditbox="showeditbox"
+      />
+      id = {{ mcq.id }}
     </div>
 
     <div v-show="showeditbox">
@@ -14,7 +18,11 @@
       <div class="choices" v-for="(choice, idx) in mcq.choices" :key="choice">
         <Choice :choice="choice" :bullet="idx" />
       </div>
-      <h6>Answer: {{mcq.answer}}</h6>
+      <h6>Answer: {{ mcq.answer }}</h6>
+      <div v-if="mcq.solution && mcq.solution != ''">
+        <h6>Solution:</h6>
+        {{ mcq.solution }}
+      </div>
     </div>
   </div>
 </template>
@@ -22,8 +30,8 @@
 <script>
 import QsnStatement from "./QsnStatement.vue";
 import Choice from "./Choice.vue";
-import EditForm from './EditForm.vue';
-import Toolbar from './Toolbar.vue';
+import EditForm from "./EditForm.vue";
+import Toolbar from "./Toolbar.vue";
 
 export default {
   name: "MCQ",
@@ -47,14 +55,14 @@ export default {
     toggleEditForm() {
       console.log(this.$globals);
       this.showeditbox = !this.showeditbox;
-      window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-      this.$emit('save-qsn');
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+      this.$emit("save-qsn");
     },
     deleteQsn(id) {
       this.$emit("delete-qsn", id);
     },
   },
-  emits: ['toggle-edit-form', 'delete-qsn', 'save-qsn'],
+  emits: ["toggle-edit-form", "delete-qsn", "save-qsn"],
 };
 </script>
 

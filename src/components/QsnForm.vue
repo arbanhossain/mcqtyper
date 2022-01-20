@@ -3,7 +3,7 @@
     <textarea
       form="qsnForm"
       cols="120"
-      rows="10"
+      rows="7"
       placeholder="Type Question Statement"
       name="statement"
     ></textarea>
@@ -12,7 +12,7 @@
         form="qsnForm"
         cols="30"
         rows="2"
-        :placeholder="`Type Choice (${this.$globals.bulletNames[i-1]})`"
+        :placeholder="`Type Choice (${this.$globals.bulletNames[i - 1]})`"
         :name="i"
       ></textarea>
     </div>
@@ -29,6 +29,13 @@
         }}</label>
       </span>
     </div>
+    <textarea
+      form="qsnForm"
+      name="solution"
+      cols="120"
+      rows="7"
+      placeholder="Type Solution (if necessary)"
+    ></textarea>
 
     <button @click.prevent="submitQsn">Submit Question</button>
   </form>
@@ -49,6 +56,7 @@ export default {
       let qsn = {};
       qsn["statement"] = formObject["statement"];
       qsn["answer"] = formObject["formChoice"];
+      qsn["solution"] = formObject["solution"];
       qsn["choices"] = [];
       for (const [key, value] of Object.entries(formObject)) {
         if (!isNaN(parseInt(key))) qsn["choices"].push(value);
@@ -65,7 +73,8 @@ export default {
       if (
         qsn.statement &&
         qsn.statement != "" &&
-        qsn.answer && qsn.answer != "" &&
+        qsn.answer &&
+        qsn.answer != "" &&
         this.choiceValidator(qsn.choices)
       ) {
         console.log(qsn);
@@ -86,11 +95,11 @@ export default {
 </script>
 
 <style scoped>
-    .solnChoice {
-        padding-right: 1rem;
-    }
-    .choiceLabel {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
+.solnChoice {
+  padding-right: 1rem;
+}
+.choiceLabel {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 </style>

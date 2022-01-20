@@ -4,7 +4,7 @@
       v-model="mcq.statement"
       form="editForm"
       cols="120"
-      rows="10"
+      rows="7"
       placeholder="Type Question Statement"
       name="statement"
     ></textarea>
@@ -32,6 +32,14 @@
         }}</label>
       </span>
     </div>
+    <textarea
+      v-model="mcq.solution"
+      form="editForm"
+      name="solution"
+      cols="120"
+      rows="7"
+      placeholder="Type Solution (if necessary)"
+    ></textarea>
   </form>
 </template>
 
