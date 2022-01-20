@@ -1,5 +1,5 @@
 <template>
-  <Questions @delete-qsn="deleteQsn" :questions="questions" />
+  <Questions @save-qsn="saveQsn" @delete-qsn="deleteQsn" :questions="questions" />
   <AddQsn @show-form="toggleShowForm" :showForm="showForm" />
   <div v-show="showForm">
     <QsnForm @submit-qsn="submitQsn" :numberOfChoices="this.numberOfChoices" />
@@ -30,7 +30,7 @@ export default {
   },
   // watch: {
   //   questions (val){
-  //     console.log(this.questions);
+  //     window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   //   }
   // },
   created() {
@@ -39,6 +39,14 @@ export default {
     } else {
       this.questions = JSON.parse(localStorage.getItem("questions"));
     }
+  },
+  mounted() {
+    try {
+      window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    } catch (error) {
+      console.log(error);
+    }
+    
   },
   methods: {
     toggleShowForm() {
