@@ -1,6 +1,6 @@
 <template>
     <div ref="qsns" v-for="(mcq,idx) in questions" :key="mcq.id">
-        <MCQ @delete-qsn="this.$emit('delete-qsn', mcq.id)" :mcq="mcq" :number="idx+1" />
+        <MCQ @save-qsn="this.$emit('save-qsn')" @delete-qsn="this.$emit('delete-qsn', mcq.id)" :mcq="mcq" :number="idx+1" />
     </div>
     
 </template>
@@ -16,6 +16,6 @@ export default {
     props: {
         questions: Object,
     },
-    emits: ['delete-qsn'],
+    emits: ['delete-qsn', 'save-qsn'],
 }
 </script>

@@ -1,18 +1,11 @@
 <template>
   <div @mouseenter="showtool = true" @mouseleave="showtool = false" class="mcq">
-
     <div v-show="showtool || showeditbox" class="mcqtools">
-      <button @click="toggleEditForm">{{ showeditbox ? "Close" : "Edit" }}</button>
-      <button @click="deleteQsn(mcq.id)" class="deleteButton">Delete</button>
+      <Toolbar @toggle-edit-form="toggleEditForm" @delete-qsn="deleteQsn(mcq.id)" :showeditbox="showeditbox" />
     </div>
 
     <div v-show="showeditbox">
-        <form id="editForm">
-        <textarea v-model="mcq.statement" form="editForm" cols="120" rows="10" placeholder="Type Question Statement" name="statement"></textarea>
-        <div v-for="(choice,i) in mcq.choices" :key="i">
-            <textarea v-model="mcq.choices[i]" form="editForm" cols="30" rows="2" placeholder="Type Choice" :name="choice"></textarea>
-        </div>
-    </form>
+      <EditForm :mcq="mcq" />
     </div>
 
     <div v-show="!showeditbox">
@@ -27,6 +20,8 @@
 <script>
 import QsnStatement from "./QsnStatement.vue";
 import Choice from "./Choice.vue";
+import EditForm from './EditForm.vue';
+import Toolbar from './Toolbar.vue';
 
 export default {
   name: "MCQ",
@@ -39,6 +34,8 @@ export default {
   components: {
     QsnStatement,
     Choice,
+    EditForm,
+    Toolbar,
   },
   props: {
     mcq: Object,
@@ -47,11 +44,14 @@ export default {
   methods: {
     toggleEditForm() {
       this.showeditbox = !this.showeditbox;
+      window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+      this.$emit('save-qsn');
     },
-    deleteQsn(id){
-        this.$emit('delete-qsn', id);
-    }
+    deleteQsn(id) {
+      this.$emit("delete-qsn", id);
+    },
   },
+  emits: ['toggle-edit-form', 'delete-qsn', 'save-qsn'],
 };
 </script>
 
@@ -60,10 +60,5 @@ export default {
   margin: 20px;
   padding: 10px;
   border: solid black 1px;
-}
-
-.deleteButton {
-    float: right;
-    background: red;
 }
 </style>
