@@ -1,5 +1,11 @@
 <template>
-  <Questions @save-qsn="saveQsn" @paste-qsn="pasteQsn" @delete-qsn="deleteQsn" :questions="questions" />
+  <Header :questionTitle="questionTitle" />
+  <Questions
+    @save-qsn="saveQsn"
+    @paste-qsn="pasteQsn"
+    @delete-qsn="deleteQsn"
+    :questions="questions"
+  />
   <AddQsn @show-form="toggleShowForm" :showForm="showForm" />
   <div v-show="showForm">
     <QsnForm @submit-qsn="submitQsn" :numberOfChoices="this.numberOfChoices" />
@@ -8,6 +14,7 @@
 </template>
 
 <script>
+import Header from "./components/Header.vue";
 import Questions from "./components/Questions.vue";
 import AddQsn from "./components/AddQsn.vue";
 import QsnForm from "./components/QsnForm.vue";
@@ -15,6 +22,7 @@ import QsnForm from "./components/QsnForm.vue";
 export default {
   name: "App",
   components: {
+    Header,
     Questions,
     AddQsn,
     QsnForm,
@@ -22,10 +30,10 @@ export default {
   data() {
     return {
       questions: [],
-      currentId: '',
+      currentId: "",
       showForm: false,
       numberOfChoices: 4,
-      msg: 'asdf',
+      questionTitle: "",
     };
   },
   // watch: {
@@ -43,21 +51,27 @@ export default {
   },
   mounted() {
     try {
-      window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+      window.MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     } catch (error) {
       console.log(error);
     }
-    
   },
   updated() {
-    window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    window.MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
   },
   methods: {
-    updateID(){
-      let id = '';
+    updateID() {
+      let id = "";
       do {
-        id = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 8);
-      } while (this.questions.filter( obj => {return obj.id == id} ).length != 0);
+        id = Math.random()
+          .toString(36)
+          .replace(/[^a-z]+/g, "")
+          .substr(0, 8);
+      } while (
+        this.questions.filter((obj) => {
+          return obj.id == id;
+        }).length != 0
+      );
       console.log(id);
       return id;
     },
@@ -77,13 +91,16 @@ export default {
     },
     saveQsn() {
       this.updateLocalStorage();
+      console.log(JSON.stringify(this.questions));
     },
     async pasteQsn(id) {
       let qsn = JSON.parse(await navigator.clipboard.readText());
       qsn.id = this.updateID();
-      let idx = [...this.questions].findIndex(obj => { return obj.id == id; });
+      let idx = [...this.questions].findIndex((obj) => {
+        return obj.id == id;
+      });
       let newqsn = this.questions;
-      newqsn.splice(idx,0,qsn);
+      newqsn.splice(idx, 0, qsn);
       this.questions = newqsn;
       //console.log(this.questions);
       this.updateLocalStorage();

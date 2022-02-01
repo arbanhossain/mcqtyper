@@ -5,3 +5,7 @@ body {
 input[type="radio"] {
     border: 1px solid rgb(112, 112, 112);
 }
+
+#app {
+    margin-top: 5%;
+}
