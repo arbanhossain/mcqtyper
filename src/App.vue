@@ -1,4 +1,6 @@
 <template>
+  <input type="file" id="file-input" style="display: none" @change="loadQsn" />
+  <div><button style="background: green" @click="openQsn">Open</button></div>
   <Header :questionTitle="questionTitle" />
   <Questions
     @save-qsn="saveQsn"
@@ -36,11 +38,6 @@ export default {
       questionTitle: "",
     };
   },
-  // watch: {
-  //   questions (val){
-  //     window.MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-  //   }
-  // },
   created() {
     if (localStorage.getItem("questions") === null) {
       localStorage.setItem("questions", JSON.stringify(this.questions));
@@ -75,6 +72,9 @@ export default {
       console.log(id);
       return id;
     },
+    clog() {
+      console.log(this.questions);
+    },
     toggleShowForm() {
       this.showForm = !this.showForm;
     },
@@ -89,9 +89,50 @@ export default {
       });
       this.updateLocalStorage();
     },
+    openQsn() {
+      alert("Make sure to save your question first");
+      document.getElementById("file-input").click();
+    },
+    loadQsn() {
+      let input = document.getElementById("file-input");
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.readAsText(
+          input.files[0]
+        );
+        reader.onload = () => {
+          let str = input.files[0].name;
+          this.questionTitle = str.substring(0,str.length - 4);
+          this.questions = JSON.parse(reader.result);
+          this.updateLocalStorage();
+        };
+      }
+    },
+    changeData(res) {
+      console.log(JSON.parse(res));
+    },
     saveQsn() {
-      this.updateLocalStorage();
-      console.log(JSON.stringify(this.questions));
+      let filename = prompt("Enter File Name:", this.questionTitle);
+      if (filename) {
+        filename += ".qsn";
+      } else {
+        return;
+      }
+      let text = JSON.stringify(this.questions);
+      let element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+      );
+      element.setAttribute("download", filename);
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
     },
     async pasteQsn(id) {
       let qsn = JSON.parse(await navigator.clipboard.readText());
