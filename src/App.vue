@@ -1,18 +1,25 @@
 <template>
   <input type="file" id="file-input" style="display: none" @change="loadQsn" />
-  <div><button style="background: green" @click="openQsn">Open</button></div>
-  <Header :questionTitle="questionTitle" />
-  <Questions
-    @save-qsn="saveQsn"
-    @paste-qsn="pasteQsn"
-    @delete-qsn="deleteQsn"
-    :questions="questions"
-  />
+  <div>
+    <button style="background: green" @click="openQsn">Open</button>
+  </div>
+  <div ref="question" class="question">
+    <Header :questionTitle="questionTitle" />
+    <Questions
+      @save-qsn="saveQsn"
+      @paste-qsn="pasteQsn"
+      @delete-qsn="deleteQsn"
+      :questions="questions"
+    />
+  </div>
   <AddQsn @show-form="toggleShowForm" :showForm="showForm" />
   <div v-show="showForm">
     <QsnForm @submit-qsn="submitQsn" :numberOfChoices="this.numberOfChoices" />
   </div>
   <div><button style="background: green" @click="saveQsn">Save</button></div>
+  <!-- <div>
+    <button style="background: cyan" @click="exportPDF">Export to PDF</button>
+  </div> -->
 </template>
 
 <script>
@@ -94,7 +101,7 @@ export default {
       });
       this.updateLocalStorage();
 
-      window.FlashMessage.error('Deleted Question!', { timeout: 2000 });
+      window.FlashMessage.error("Deleted Question!", { timeout: 2000 });
     },
     openQsn() {
       alert("Make sure to save your question first");
@@ -154,6 +161,9 @@ export default {
       this.updateLocalStorage();
 
       window.FlashMessage.info("Pasted!", { timeout: 2000 });
+    },
+    exportPDF() {
+      console.log("printed");
     },
     updateLocalStorage() {
       localStorage.setItem("questions", JSON.stringify(this.questions));
