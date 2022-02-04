@@ -44,6 +44,11 @@ export default {
     } else {
       this.questions = JSON.parse(localStorage.getItem("questions"));
     }
+    if (localStorage.getItem("qsn-title") === null) {
+      localStorage.setItem("qsn-title", this.questionTitle);
+    } else {
+      this.questionTitle = localStorage.getItem("qsn-title");
+    }
     this.currentId = this.updateID();
   },
   mounted() {
@@ -88,6 +93,8 @@ export default {
         return obj.id != id;
       });
       this.updateLocalStorage();
+
+      window.FlashMessage.error('Deleted Question!', { timeout: 2000 });
     },
     openQsn() {
       alert("Make sure to save your question first");
@@ -98,12 +105,10 @@ export default {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
 
-        reader.readAsText(
-          input.files[0]
-        );
+        reader.readAsText(input.files[0]);
         reader.onload = () => {
           let str = input.files[0].name;
-          this.questionTitle = str.substring(0,str.length - 4);
+          this.questionTitle = str.substring(0, str.length - 4);
           this.questions = JSON.parse(reader.result);
           this.updateLocalStorage();
         };
@@ -133,6 +138,8 @@ export default {
       element.click();
 
       document.body.removeChild(element);
+
+      window.FlashMessage.success("Save Successful", { timeout: 2000 });
     },
     async pasteQsn(id) {
       let qsn = JSON.parse(await navigator.clipboard.readText());
@@ -145,6 +152,8 @@ export default {
       this.questions = newqsn;
       //console.log(this.questions);
       this.updateLocalStorage();
+
+      window.FlashMessage.info("Pasted!", { timeout: 2000 });
     },
     updateLocalStorage() {
       localStorage.setItem("questions", JSON.stringify(this.questions));

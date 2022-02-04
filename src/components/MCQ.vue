@@ -1,5 +1,5 @@
 <template>
-  <div @mouseenter="showtool = true" @mouseleave="showtool = false" class="mcq">
+  <div @mouseenter="showtool = true" @mouseleave="showtool = false" class="mcq" :class="{ borders :this.$globals.borders }">
     <div v-show="showtool || showeditbox" class="mcqtools">
       <Toolbar
         @toggle-edit-form="toggleEditForm"
@@ -65,6 +65,7 @@ export default {
     },
     async copyQsn(id) {
       await navigator.clipboard.writeText(JSON.stringify(this.mcq));
+      window.FlashMessage.success('Copied!', {theme: 'dark', timeout: 2000});
     },
   },
   emits: ["toggle-edit-form", "delete-qsn", "save-qsn", "copy-qsn", 'paste-qsn'],
@@ -75,6 +76,9 @@ export default {
 .mcq {
   margin: 20px;
   padding: 10px;
+}
+
+.borders {
   border: solid rgb(173, 173, 173) 1px;
   border-radius: 10px;
 }

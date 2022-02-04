@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="text" name="title" v-model="questionTitle" />
+    <input type="text" name="title" v-model="questionTitle" @change="updateTitle" />
   </div>
 </template>
 
@@ -9,6 +9,11 @@ export default {
   name: "Header",
   props: {
     questionTitle: String,
+  },
+  methods: {
+    updateTitle() {
+      localStorage.setItem("qsn-title", this.questionTitle);
+    },
   },
 };
 </script>
