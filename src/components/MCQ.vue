@@ -16,12 +16,12 @@
     </div>
 
     <div v-show="!showeditbox">
-      <h4>{{ number }}. {{ mcq.statement }}</h4>
+      <h4 class="statement">{{ number }}. {{ mcq.statement }}</h4>
       <div class="choices" v-for="(choice, idx) in mcq.choices" :key="choice">
         <Choice :choice="choice" :bullet="idx" />
       </div>
       <h6>Answer: {{ mcq.answer }}</h6>
-      <div v-if="mcq.solution && mcq.solution != ''">
+      <div v-if="mcq.solution && mcq.solution != ''" class="solution">
         <h6>Solution:</h6>
         {{ mcq.solution }}
       </div>
@@ -54,8 +54,12 @@ export default {
     number: Number,
   },
   methods: {
+    sanitizeForImage(){
+      let return_value = window.HandleImageSetting(this.$globals.imgDelimiter, this.$globals.imgPattern, this.mcq.statement);
+
+    },
     toggleEditForm() {
-      console.log(this.$globals);
+      //console.log(this.$globals);
       this.showeditbox = !this.showeditbox;
       window.MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
       this.$emit("save-qsn");
@@ -81,5 +85,9 @@ export default {
 .borders {
   border: solid rgb(173, 173, 173) 1px;
   border-radius: 10px;
+}
+
+img {
+  width: 50%;
 }
 </style>

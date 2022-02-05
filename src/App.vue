@@ -16,7 +16,12 @@
   <div v-show="showForm">
     <QsnForm @submit-qsn="submitQsn" :numberOfChoices="this.numberOfChoices" />
   </div>
-  <div><button style="background: green" @click="saveQsn">Save</button></div>
+  <div>
+    <button style="background: green" @click="saveQsnAsFile">Save</button>
+  </div>
+  <!-- <div>
+    <button style="background: cyan" @click="showImage">Show Image</button>
+  </div> -->
   <!-- <div>
     <button style="background: cyan" @click="exportPDF">Export to PDF</button>
   </div> -->
@@ -60,6 +65,7 @@ export default {
   },
   mounted() {
     try {
+      this.updateImageSetting();
       window.MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     } catch (error) {
       console.log(error);
@@ -93,6 +99,7 @@ export default {
     submitQsn(qsn) {
       qsn["id"] = this.updateID();
       this.questions = [...this.questions, qsn];
+      this.updateImageSetting()
       this.updateLocalStorage();
     },
     deleteQsn(id) {
@@ -125,6 +132,10 @@ export default {
       console.log(JSON.parse(res));
     },
     saveQsn() {
+      this.updateLocalStorage();
+      this.updateImageSetting();
+    },
+    saveQsnAsFile() {
       let filename = prompt("Enter File Name:", this.questionTitle);
       if (filename) {
         filename += ".qsn";
@@ -164,6 +175,16 @@ export default {
     },
     exportPDF() {
       console.log("printed");
+    },
+    updateImageSetting() {
+      window.HandleImageSetting(
+        this.$globals.imgDelimiter,
+        this.$globals.imgPattern,
+        this.$globals.imgReplaceClasses
+      );
+    },
+    showImage(){
+      this.updateImageSetting();
     },
     updateLocalStorage() {
       localStorage.setItem("questions", JSON.stringify(this.questions));
