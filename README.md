@@ -1,5 +1,8 @@
 # mcqtyper
 
+### used
+vue 3, javascript
+
 ## Project setup
 ```
 npm install
